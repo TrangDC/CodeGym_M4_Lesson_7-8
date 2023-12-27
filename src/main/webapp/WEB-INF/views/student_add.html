@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="/layout :: head">
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<h3>Add Student</h3>
+<p>
+    <a th:href="@{/students}">
+        Back to student list
+    </a>
+</p>
+<div id="form">
+    <form th:action="@{/students/create/{id}(id=${student.getId()})}" th:object="${student}"
+          method="POST">
+        <input type="hidden" th:field="*{id}"/>
+        <div>
+            <label for="name">Name</label>
+            <input type="text" id="name" th:field="*{name}"/>
+            <span th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></span>
+        </div>
+        <div>
+            <label for="gender">Gender</label>
+            <select id="gender" th:field="*{gender}">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+                <option value="other">Other</option>
+            </select>
+        </div>
+        <div>
+            <label for="age">Age</label>
+            <input type="text" id="age" th:field="*{age}"/>
+            <span th:if="${#fields.hasErrors('age')}" th:errors="*{age}"></span>
+        </div>
+        <div>
+            <label for="address">Address</label>
+            <input type="text" id="address" th:field="*{address}"/>
+        </div>
+        <div>
+            <label for="classroom">Classroom</label>
+            <select id="classroom" name="classroom" th:field="*{classroom}">
+                <option th:each="p : ${classrooms}" th:value="${p.id}" th:text="${p.name}"></option>
+            </select>
+        </div>
+        <input type="submit" value="Save"/>
+    </form>
+</div>
+<footer th:replace="/layout :: footer"></footer>
+</body>
+</html>

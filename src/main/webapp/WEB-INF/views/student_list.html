@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="en">
+<head th:replace="/layout :: head">
+    <meta charset="UTF-8">
+    <title>List Student</title>
+</head>
+<body>
+<h3>Students</h3>
+<p>
+    <a th:href="@{/students/create}">
+        Add new student
+    </a>
+</p>
+<p>
+    <a th:href="@{/students/sort}">
+        Sort by age
+    </a>
+</p>
+<form th:action="@{/students/filter}" method="get">
+    <div>
+        <label for="gender">Filter by Gender</label>
+        <select id="gender" name="gender">
+            <option value="" name="gender">All</option>
+            <option value="male" name="gender">Male</option>
+            <option value="female" name="gender">Female</option>
+            <option value="other" name="gender">Other</option>
+        </select>
+        <button type="submit">Filter</button>
+    </div>
+</form>
+<p>
+    <a th:href="@{/classrooms}">
+        Classrooms
+    </a>
+</p>
+<div class="notify">
+    <div th:if="${message}">
+        <span th:text="${message}"></span>
+    </div>
+</div>
+
+<table id = "students">
+    <thead>
+    <tr>
+        <th>STT</th>
+        <th>Name</th>
+        <th>Age</th>
+        <th>Gender</th>
+        <th>Address</th>
+        <th>Classroom</th>
+        <th>Update</th>
+        <th>Delete</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="c,cStatus : ${students}">
+        <td th:text="${cStatus.count}"></td>
+        <td th:text="${c.getName()}"></td>
+        <td th:text="${c.getAge()}"></td>
+        <td th:text="${c.getGender()}"></td>
+        <td th:text="${c.getAddress()}"></td>
+        <td th:text="${c.getClassroom().getName()}"></td>
+        <td><a th:href="@{/students/update/{id}(id=${c.getId()})}">update</a></td>
+        <td><a th:href="@{/students/delete/{id}(id=${c.getId()})}">delete</a></td>
+    </tr>
+    </tbody>
+</table>
+<footer th:replace="/layout :: footer"></footer>
+</body>
+</html>
