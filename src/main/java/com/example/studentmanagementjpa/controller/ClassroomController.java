@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.HttpSession;
 import java.util.Optional;
 
 @Controller
@@ -20,6 +21,9 @@ public class ClassroomController {
 
     @Autowired
     private IStudentService studentService;
+
+    @Autowired
+    private HttpSession httpSession;
 
     @GetMapping
     public ModelAndView listClassrooms() {
@@ -41,6 +45,8 @@ public class ClassroomController {
                          RedirectAttributes redirectAttributes) {
         classroomService.save(classroom);
         redirectAttributes.addFlashAttribute("message", "Create new classroom successfully");
+
+        httpSession.setAttribute("classroom", classroom);
         return "redirect:/classrooms";
     }
 
@@ -78,4 +84,11 @@ public class ClassroomController {
         }
     }
 
+    @GetMapping("/viewSession")
+    public ModelAndView viewSession() {
+        ModelAndView modelAndView = new ModelAndView("/session");
+        Classroom classroom = (Classroom) httpSession.getAttribute("classroom");
+        modelAndView.addObject("classroom",classroom);
+        return modelAndView;
+    }
 }

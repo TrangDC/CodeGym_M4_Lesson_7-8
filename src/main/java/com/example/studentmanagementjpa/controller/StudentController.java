@@ -13,10 +13,13 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletResponse;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
 
 @Controller
 @RequestMapping("/students")
@@ -33,10 +36,19 @@ public class StudentController {
     }
 
     @GetMapping
-    public ModelAndView listStudents() {
+    public ModelAndView listStudents(@CookieValue(name = "counter", defaultValue = "0") Long counter,
+                                     HttpServletResponse response) {
         ModelAndView modelAndView = new ModelAndView("/student_list");
         Iterable<Student> students = studentService.findAll();
         modelAndView.addObject("students", students);
+
+        //Sử dụng cookie để theo dõi lượt truy cập request của 1 user
+        counter++;
+        Cookie cookie = new Cookie("counter", counter.toString());
+        cookie.setMaxAge(20);
+        response.addCookie(cookie);
+        modelAndView.addObject("cookie", cookie);
+
         return modelAndView;
     }
     @GetMapping("/create")
